@@ -10,6 +10,7 @@ Key sub-operations performed in a simple V1-like model
 
 import Image
 import scipy as N
+import numpy as np
 import scipy.signal
 
 fftconv = scipy.signal.fftconvolve
@@ -222,7 +223,7 @@ def v1like_filter(hin, conv_mode, filterbank, use_cache=False):
 
     filt0 = filterbank[0]
     fft_shape = N.array(hin.shape) + N.array(filt0.shape) - 1
-    hin_fft = scipy.signal.fftn(hin, fft_shape)
+    hin_fft = np.fft.fftn(hin, fft_shape)
 
     if conv_mode == "valid":
         hout_shape = list( N.array(hin.shape[:2]) - N.array(filt0.shape[:2]) + 1 ) + [nfilters]
@@ -249,12 +250,12 @@ def v1like_filter(hin, conv_mode, filterbank, use_cache=False):
             if key in fft_cache:
                 filt_fft = fft_cache[key]
             else:
-                filt_fft = scipy.signal.fftn(filt, fft_shape)
+                filt_fft = np.fft.fftn(filt, fft_shape)
                 fft_cache[key] = filt_fft
         else:
-            filt_fft = scipy.signal.fftn(filt, fft_shape)
+            filt_fft = np.fft.fftn(filt, fft_shape)
 
-        res_fft = scipy.signal.ifftn(hin_fft*filt_fft)
+        res_fft = np.fft.ifftn(hin_fft*filt_fft)
         res_fft = res_fft[begy:endy, begx:endx]
         hout_new[:,:,i] = N.real(res_fft)
 
