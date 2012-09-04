@@ -5,7 +5,7 @@ from v1like import V1Like
 from scipy.misc import lena
 
 v = V1Like('v1like_a_plus')
-im = lena()
+im = 1.*lena()
 features = v(im)
 
 
